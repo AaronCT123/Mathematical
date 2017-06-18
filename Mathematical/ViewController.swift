@@ -10,28 +10,19 @@ import UIKit
 
 class ViewController: UIViewController {
     
-    /*
+    var valueOne: String?
+    var valueTwo: String?
+    var operation: String?
+    var solution: Double = 0
     
-    Answers are "solution"s shown in the "entryField"
-    Think entryField might need to be a string that matches
-    "entryField" needs to be set to 0 initially
+    var isTyping: Bool = false
+    var isFraction: Bool = false
     
-    Press a number or decimal button, that value is placed into "entryField" and stored in a variable
-    Press equal sign, calculations are performed and the "solution" is placed in the "entryField"
-    Press percentage and number in "entryField" is stored in variable and divided by 100
-     
-    Back
-    
-    */
-
-    @IBOutlet weak var entryField: UILabel!
-    
-    var entryString = "0"
+    @IBOutlet weak var calculatorDisplay: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-        updateEntryField()
     }
 
     override func didReceiveMemoryWarning() {
@@ -39,22 +30,75 @@ class ViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    /*
+    @IBAction func numberKeyTapped(sender: UIButton) {
+        let number = sender.currentTitle
+        let displayText = calculatorDisplay.text
+        
+        if isTyping {
+            if let num = number, let display = displayText {
+                calculatorDisplay.text = display + num
+            }
+        } else {
+            calculatorDisplay.text = number
+            isTyping = true
+        }
+    }
  
-     If 0 is in entryString and user presses any NumberKey, replace with NumberKeyValue
-     If 0 is in entryString and user presses ., concatenate to "0."
-     
-    */
-
-    @IBAction func buttonPressed(sender: UIButton) {
-        // Do something
-                
-        updateEntryField()
+    @IBAction func decimalKeyTapped(sender: UIButton) {
+        let displayText = calculatorDisplay.text
+        
+        if isFraction == false {
+            if let display = displayText {
+                calculatorDisplay.text = display + "."
+            }
+            isFraction = true
+            isTyping = true
+        }
     }
     
-    func updateEntryField() {
-        entryField.text = entryString
+    @IBAction func deleteKeyTapped(sender: UIButton) {
+        var displayText = "\(calculatorDisplay.text ?? "")"
+        displayText.remove(at: displayText.index(before: displayText.endIndex))
+        
+        if displayText != "" {
+            calculatorDisplay.text = displayText
+        } else {
+            clearScreen()
+        }
     }
- 
+    
+    @IBAction func clearKeyTapped(sender: UIButton) {
+        clearScreen()
+    }
+    
+    @IBAction func operationKeyTapped(sender: UIButton) {
+        valueOne = calculatorDisplay.text
+        operation = sender.currentTitle
+        isTyping = false
+    }
+    
+    @IBAction func equalsKeyTapped(sender: UIButton) {
+        valueTwo = calculatorDisplay.text
+        
+        if let a = valueOne, let b = valueTwo {
+            if operation == "+" {
+                solution = Double(a)! + Double(b)!
+            }
+            if operation == "-" {
+                solution = Double(a)! - Double(b)!
+            }
+        }
+        
+        // Check whether you can display solution as an Int
+        
+        calculatorDisplay.text = "\(solution)"
+        isTyping = false
+    }
+    
+    func clearScreen() {
+        calculatorDisplay.text = "0"
+        isTyping = false
+    }
+    
 }
 
