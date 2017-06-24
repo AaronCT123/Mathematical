@@ -74,10 +74,15 @@ class ViewController: UIViewController {
     @IBAction func operationKeyTapped(sender: UIButton) {
         valueOne = calculatorDisplay.text
         operation = sender.currentTitle
+        // ^^ Replace with check for UIButton Tag? Or Use custom classes?
+        
         isTyping = false
     }
     
     @IBAction func equalsKeyTapped(sender: UIButton) {
+        // Check if user has input any text?
+        // If not, perform previous operation with same value.
+        
         valueTwo = calculatorDisplay.text
         
         if let a = valueOne, let b = valueTwo {
@@ -90,14 +95,27 @@ class ViewController: UIViewController {
         }
         
         // Check whether you can display solution as an Int
+        if (solution.truncatingRemainder(dividingBy: 1)) == 0 {
+            // NSNumberFormatter extension type?
+        } else {
+            calculatorDisplay.text = "\(solution)"
+        }
         
-        calculatorDisplay.text = "\(solution)"
         isTyping = false
     }
     
     func clearScreen() {
         calculatorDisplay.text = "0"
         isTyping = false
+    }
+    
+    func cleanValueString(_ value: String?) -> String? {
+        guard let value = value else {
+            // Wtf do I do here?
+            return nil
+        }
+        
+        
     }
     
 }
