@@ -10,15 +10,19 @@ import UIKit
 
 class ViewController: UIViewController {
     
+    @IBOutlet weak var displayLabel: UILabel!
+    
+    var displayValue: NSNumber = 0
+    
+    /*
     var valueOne: String?
     var valueTwo: String?
     var operation: String?
     var solution: Double = 0
     
     var isTyping: Bool = false
-    var isFraction: Bool = false
-    
-    @IBOutlet weak var calculatorDisplay: UILabel!
+    var hasDecimal: Bool = false
+    */
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -44,79 +48,67 @@ class ViewController: UIViewController {
         }
     }
  
-    @IBAction func decimalKeyTapped(sender: UIButton) {
-        let displayText = calculatorDisplay.text
+    /*
+    @IBAction func decimalKeyTapped(sender: Key) {
+        let text = displayLabel.text
         
-        if isFraction == false {
-            if let display = displayText {
-                calculatorDisplay.text = display + "."
+        if hasDecimal == false {
+            if let display = text {
+                displayLabel.text = display + "."
             }
-            isFraction = true
+            hasDecimal = true
             isTyping = true
         }
     }
     
-    @IBAction func deleteKeyTapped(sender: UIButton) {
-        var displayText = "\(calculatorDisplay.text ?? "")"
-        displayText.remove(at: displayText.index(before: displayText.endIndex))
+    @IBAction func deleteKeyTapped(sender: Key) {
+        var text = "\(displayLabel.text ?? "")"
+        text.remove(at: text.index(before: text.endIndex))
         
-        if displayText != "" {
-            calculatorDisplay.text = displayText
+        if text != "" {
+            displayLabel.text = text
         } else {
-            clearScreen()
+            clearDisplay()
         }
     }
     
-    @IBAction func clearKeyTapped(sender: UIButton) {
-        clearScreen()
+    @IBAction func clearKeyTapped(sender: Key) {
+        clearDisplay()
     }
     
-    @IBAction func operationKeyTapped(sender: UIButton) {
-        valueOne = calculatorDisplay.text
+    @IBAction func operationKeyTapped(sender: Key) {
+        valueOne = displayLabel.text
         operation = sender.currentTitle
         // ^^ Replace with check for UIButton Tag? Or Use custom classes?
         
         isTyping = false
     }
     
-    @IBAction func equalsKeyTapped(sender: UIButton) {
+    @IBAction func equalsKeyTapped(sender: Key) {
         // Check if user has input any text?
         // If not, perform previous operation with same value.
         
-        valueTwo = calculatorDisplay.text
+        valueTwo = displayLabel.text
         
         if let a = valueOne, let b = valueTwo {
             if operation == "+" {
-                solution = Double(a)! + Double(b)!
+                solution = Double(a)! + Double(a)!
             }
             if operation == "-" {
                 solution = Double(a)! - Double(b)!
             }
         }
         
-        // Check whether you can display solution as an Int
-        if (solution.truncatingRemainder(dividingBy: 1)) == 0 {
-            // NSNumberFormatter extension type?
-        } else {
-            calculatorDisplay.text = "\(solution)"
-        }
-        
+        // displayLabel.text = prettyString(solution)
+        // displayValue = solution
         isTyping = false
     }
     
-    func clearScreen() {
-        calculatorDisplay.text = "0"
+    func clearDisplay() {
+        displayLabel.text = "0"
         isTyping = false
+        hasDecimal = false
     }
-    
-    func cleanValueString(_ value: String?) -> String? {
-        guard let value = value else {
-            // Wtf do I do here?
-            return nil
-        }
-        
-        
-    }
-    
+    */
 }
 
