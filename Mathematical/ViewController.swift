@@ -12,21 +12,24 @@ class ViewController: UIViewController {
     
     @IBOutlet weak var displayLabel: UILabel!
     
+    var labelText = "0"
     var displayValue: NSNumber = 0
     
+    var isTyping = false
+    var hasDecimal = false
+
     /*
     var valueOne: String?
     var valueTwo: String?
     var operation: String?
     var solution: Double = 0
-    
-    var isTyping: Bool = false
-    var hasDecimal: Bool = false
     */
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        
+        displayLabel.text = labelText
     }
 
     override func didReceiveMemoryWarning() {
@@ -35,32 +38,45 @@ class ViewController: UIViewController {
     }
     
     @IBAction func numberKeyTapped(sender: UIButton) {
-        let number = sender.currentTitle
-        let displayText = calculatorDisplay.text
+        let keyTapped = sender.currentTitle
+        let previousValue = cleanString(displayValue) // Problem occurs here
+        print(previousValue)
+        var newString = ""
         
         if isTyping {
-            if let num = number, let display = displayText {
-                calculatorDisplay.text = display + num
+            if let key = keyTapped, let previous = previousValue {
+                newString = previous + key
+                displayValue = getNumber(from: newString)
             }
         } else {
-            calculatorDisplay.text = number
+            displayValue = getNumber(from: keyTapped)
             isTyping = true
         }
+        
+        displayLabel.text = getString(from: displayValue)
     }
  
     /*
     @IBAction func decimalKeyTapped(sender: Key) {
-        let text = displayLabel.text
+        let previousValue = getString(from: displayValue)
+        var newString = ""
         
         if hasDecimal == false {
-            if let display = text {
-                displayLabel.text = display + "."
+            if let previous = previousValue {
+                newString = previous + "."
             }
+            
             hasDecimal = true
             isTyping = true
+        } else {
+            
         }
+        
+        displayValue = newString.numberValue
     }
+    */
     
+    /*
     @IBAction func deleteKeyTapped(sender: Key) {
         var text = "\(displayLabel.text ?? "")"
         text.remove(at: text.index(before: text.endIndex))
@@ -99,7 +115,7 @@ class ViewController: UIViewController {
             }
         }
         
-        // displayLabel.text = prettyString(solution)
+        // displayLabel.text = toStringValue(solution)
         // displayValue = solution
         isTyping = false
     }
@@ -110,5 +126,6 @@ class ViewController: UIViewController {
         hasDecimal = false
     }
     */
+
 }
 
