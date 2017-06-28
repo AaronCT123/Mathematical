@@ -12,24 +12,23 @@ class ViewController: UIViewController {
     
     @IBOutlet weak var displayLabel: UILabel!
     
-    var labelText = "0"
+    var textEntry = "0"
     var displayValue: NSNumber = 0
     
     var isTyping = false
-    var hasDecimal = false
 
-    /*
-    var valueOne: String?
-    var valueTwo: String?
+    var firstNumber: Double = 0
+    var secondNumber: Double = 0
+    
     var operation: String?
+    
+    /*
     var solution: Double = 0
     */
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-        
-        displayLabel.text = labelText
     }
 
     override func didReceiveMemoryWarning() {
@@ -39,53 +38,53 @@ class ViewController: UIViewController {
     
     @IBAction func numberKeyTapped(sender: UIButton) {
         let keyTapped = sender.currentTitle
-        let previousValue = cleanString(displayValue) // Problem occurs here
-        print(previousValue)
-        var newString = ""
         
         if isTyping {
-            if let key = keyTapped, let previous = previousValue {
-                newString = previous + key
-                displayValue = getNumber(from: newString)
+            if let key = keyTapped {
+                textEntry += key
             }
         } else {
-            displayValue = getNumber(from: keyTapped)
-            isTyping = true
+            if let key = keyTapped {
+                textEntry = key
+                isTyping = true
+            }
         }
         
+        displayValue = getNumber(from: textEntry)
         displayLabel.text = getString(from: displayValue)
     }
- 
-    /*
-    @IBAction func decimalKeyTapped(sender: Key) {
-        let previousValue = getString(from: displayValue)
-        var newString = ""
-        
-        if hasDecimal == false {
-            if let previous = previousValue {
-                newString = previous + "."
-            }
-            
-            hasDecimal = true
-            isTyping = true
-        } else {
-            
-        }
-        
-        displayValue = newString.numberValue
-    }
-    */
     
-    /*
-    @IBAction func deleteKeyTapped(sender: Key) {
-        var text = "\(displayLabel.text ?? "")"
-        text.remove(at: text.index(before: text.endIndex))
+    @IBAction func zeroKeyTapped(sender: Key) {
         
-        if text != "" {
-            displayLabel.text = text
+    }
+    
+    @IBAction func decimalKeyTapped(sender: Key) {
+        if textEntry.hasDecimal == false {
+            textEntry += "."
+            isTyping = true
+            
+            displayValue = getNumber(from: textEntry)
+            displayLabel.text = "\(getString(from: displayValue) ?? "")" + "."
+        }
+    }
+    
+    @IBAction func deleteKeyTapped(sender: Key) {
+        /*
+        if textEntry != "" && textEntry != nil {
+            textEntry.remove(at: textEntry.index(before: textEntry.endIndex))
+            
+            if textEntry.lastCharacter != "." {
+                displayValue = getNumber(from: textEntry)
+                displayLabel.text = getString(from: displayValue)
+            } else {
+                displayValue = getNumber(from: textEntry)
+                displayLabel.text = "\(getString(from: displayValue) ?? "")" + "."
+                textEntry = displayLabel.text!
+            }
         } else {
             clearDisplay()
         }
+        */
     }
     
     @IBAction func clearKeyTapped(sender: Key) {
@@ -93,39 +92,75 @@ class ViewController: UIViewController {
     }
     
     @IBAction func operationKeyTapped(sender: Key) {
+        
+        /*
         valueOne = displayLabel.text
         operation = sender.currentTitle
         // ^^ Replace with check for UIButton Tag? Or Use custom classes?
+ 
         
+        isTyping = false
+        */
+        
+        enum Operation: String {
+            case add = "+"
+            case subtract = "−"
+            case divide = "÷"
+            case multiply = "×"
+        }
+        
+        operation = sender.currentTitle
+        firstNumber = Double(displayValue)
         isTyping = false
     }
     
     @IBAction func equalsKeyTapped(sender: Key) {
-        // Check if user has input any text?
-        // If not, perform previous operation with same value.
+        var solution: Double = 0
+        let display = Double(displayValue)
+        secondNumber = Double(displayValue)
         
-        valueTwo = displayLabel.text
-        
-        if let a = valueOne, let b = valueTwo {
+        if isTyping {
             if operation == "+" {
-                solution = Double(a)! + Double(a)!
+                solution = firstNumber + secondNumber
             }
-            if operation == "-" {
-                solution = Double(a)! - Double(b)!
+            if operation == "−" {
+                solution = firstNumber - secondNumber
+            }
+            if operation == "×" {
+                solution = firstNumber * secondNumber
+            }
+            if operation == "÷" {
+                solution = firstNumber / secondNumber
+            }
+            
+            firstNumber = secondNumber
+        } else {
+            if operation == "+" {
+                solution += display + firstNumber
+            }
+            if operation == "−" {
+                solution = display - firstNumber
+            }
+            if operation == "×" {
+                solution = display * firstNumber
+            }
+            if operation == "÷" {
+                solution = display / firstNumber
             }
         }
         
-        // displayLabel.text = toStringValue(solution)
-        // displayValue = solution
         isTyping = false
+        textEntry = "\(solution)"
+        displayValue = getNumber(from: textEntry)
+        displayLabel.text = getString(from: displayValue)
     }
     
     func clearDisplay() {
+        firstNumber = 0
+        secondNumber = 0
         displayLabel.text = "0"
         isTyping = false
-        hasDecimal = false
     }
-    */
-
+    
 }
 

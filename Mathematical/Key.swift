@@ -18,53 +18,31 @@ class Key: UIButton {
     }
 }
 
-class FunctionKey: Key {
-    /*
-    let operation = String
-    
-    switch operation {
-        case .add:
+extension String {
+    var hasDecimal: Bool {
+        if self.characters.contains(".") {
+            return true
+        } else {
+            return false
+        }
     }
-    */
+    
+    var lastCharacter: Character {
+        return self.characters.last!
+    }
 }
 
-enum Operation: String {
-    case add = "+"
-    case subtract = "−"
-    case divide = "÷"
-    case multiply = "×"
-}
-
-/*
 func getNumber(from string: String?) -> NSNumber {
+  
     let formatter = NumberFormatter()
+    formatter.generatesDecimalNumbers = true
     formatter.numberStyle = .decimal
     return formatter.number(from: string!)!
-}
-*/
-
-func getNumber(from string: String?) -> NSNumber {
-    var number: NSNumber = 0
     
-    if let str = string {
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .decimal
-        number = formatter.number(from: str)!
-    }
-    
-    return number
 }
 
 func getString(from value: NSNumber) -> String? {
-    
     let formatter = NumberFormatter()
     formatter.numberStyle = .decimal
-    
-    let formattedNumber = formatter.string(from: value)
-    return formattedNumber
-}
-
-func cleanString(_ value: NSNumber) -> String? {
-    let formatter = NumberFormatter()
-    let formattedNumber = formatter.string(from: value)
+    return formatter.string(from: value)
 }

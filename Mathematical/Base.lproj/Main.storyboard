@@ -37,6 +37,9 @@
                                         <state key="normal" title=".">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
+                                        <connections>
+                                            <action selector="decimalKeyTappedWithSender:" destination="BYZ-38-t0r" eventType="touchUpInside" id="hp7-bW-5tZ"/>
+                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ly9-dO-Ebi" customClass="Key" customModule="Mathematical" customModuleProvider="target">
                                         <rect key="frame" x="80" y="288" width="79" height="70"/>
@@ -47,7 +50,7 @@
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
-                                            <action selector="numberKeyTappedWithSender:" destination="BYZ-38-t0r" eventType="touchUpInside" id="eKv-ei-woL"/>
+                                            <action selector="zeroKeyTappedWithSender:" destination="BYZ-38-t0r" eventType="touchUpInside" id="p4g-mH-ygl"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5kB-40-Nkp" customClass="Key" customModule="Mathematical" customModuleProvider="target">
