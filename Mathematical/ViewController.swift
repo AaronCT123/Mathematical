@@ -13,7 +13,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var displayLabel: UILabel!
     
     var textEntry: String? = "0"
-    var displayValue: NSNumber = 0
+    var displayValue: NSNumber = 0.000
 
     var isTyping = false
     
@@ -37,7 +37,7 @@ class ViewController: UIViewController {
         
         if isTyping {
             if let key = keyTapped {
-                textEntry = textEntry! + key
+                displayLabel.text = textEntry! + key
             }
         } else {
             if let key = keyTapped {
@@ -94,7 +94,6 @@ class ViewController: UIViewController {
         }
     }
  
-    /*
     @IBAction func deleteKeyTapped(sender: Key) {
         var newString: String?
         
@@ -115,7 +114,6 @@ class ViewController: UIViewController {
     @IBAction func clearKeyTapped(sender: Key) {
         clearScreen()
     }
-    */
  
     /*
     @IBAction func operationKeyTapped(sender: Key) {
@@ -125,6 +123,7 @@ class ViewController: UIViewController {
     }
     */
     
+    /*
     @IBAction func equalsKeyTapped(sender: Key) {
         var solution: Double = 0
         let display = Double(displayValue)
@@ -163,23 +162,25 @@ class ViewController: UIViewController {
         isTyping = false
         textEntry = "\(solution)"
         displayValue = getNumber(from: textEntry)
-        updateDisplay()
+        displayLabel.text = getString(from: displayValue)
     }
+    */
     
     // Can I make an optional version of this that updates the display with the number passed in?
     // Or should I keep it as is so that displayLabel only updates once it has a value to display?
+    
     func updateDisplay() {
         displayLabel.text = getString(from: displayValue)
     }
-    
+
     func clearScreen() {
         textEntry = "0"
-        displayValue = 0
+        // displayValue = 0
         firstNumber = 0
         secondNumber = 0
         isTyping = false
         
-        updateDisplay()
+        // updateDisplay()
     }
     
 }
