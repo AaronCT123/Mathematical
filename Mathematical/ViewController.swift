@@ -12,19 +12,15 @@ class ViewController: UIViewController {
     
     @IBOutlet weak var displayLabel: UILabel!
     
-    var textEntry = "0"
+    var textEntry: String? = "0"
     var displayValue: NSNumber = 0
-    
-    var isTyping = false
 
+    var isTyping = false
+    
     var firstNumber: Double = 0
     var secondNumber: Double = 0
     
     var operation: String?
-    
-    /*
-    var solution: Double = 0
-    */
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,7 +37,7 @@ class ViewController: UIViewController {
         
         if isTyping {
             if let key = keyTapped {
-                textEntry += key
+                textEntry = textEntry! + key
             }
         } else {
             if let key = keyTapped {
@@ -50,69 +46,84 @@ class ViewController: UIViewController {
             }
         }
         
+        // Check if there’s a decimal? Then do something…
+        
         displayValue = getNumber(from: textEntry)
-        displayLabel.text = getString(from: displayValue)
+        // displayLabel.text = getString(from: displayValue)
+        updateDisplay()
+        print(textEntry)
+        print("^^ Text Entry")
+        
+        print(displayValue)
+        print("^^ Value")
+        
+        print("\(displayLabel.text)")
+        print("^^ Label")
     }
     
     @IBAction func zeroKeyTapped(sender: Key) {
         
     }
-    
+
     @IBAction func decimalKeyTapped(sender: Key) {
-        if textEntry.hasDecimal == false {
-            textEntry += "."
-            isTyping = true
-            
-            displayValue = getNumber(from: textEntry)
-            displayLabel.text = "\(getString(from: displayValue) ?? "")" + "."
-        }
-    }
-    
-    @IBAction func deleteKeyTapped(sender: Key) {
         /*
-        if textEntry != "" && textEntry != nil {
-            textEntry.remove(at: textEntry.index(before: textEntry.endIndex))
-            
-            if textEntry.lastCharacter != "." {
-                displayValue = getNumber(from: textEntry)
-                displayLabel.text = getString(from: displayValue)
-            } else {
-                displayValue = getNumber(from: textEntry)
-                displayLabel.text = "\(getString(from: displayValue) ?? "")" + "."
-                textEntry = displayLabel.text!
+        let displayText = calculatorDisplay.text
+ 
+        if isFraction == false {
+            if let display = displayText {
+                calculatorDisplay.text = display + "."
             }
-        } else {
-            clearDisplay()
+         
+            isFraction = true
+            isTyping = true
         }
         */
+        
+        var newString: String?
+ 
+        if let oldString = textEntry {
+            if oldString.hasDecimal == false {
+                newString = oldString + "."
+                isTyping = true
+                
+                displayValue = getNumber(from: newString)
+                displayLabel.text = "\(getString(from: displayValue) ?? "")" + "."
+                textEntry = displayLabel.text
+                print(textEntry)
+            }
+        }
+    }
+ 
+    /*
+    @IBAction func deleteKeyTapped(sender: Key) {
+        var newString: String?
+        
+        if let oldString = textEntry {
+            newString = oldString.substring(to: oldString.index(before: oldString.endIndex))
+        }
+
+        if newString != "" {
+            textEntry = newString
+        } else {
+            clearScreen()
+        }
+        
+        displayValue = getNumber(from: textEntry)
+        updateDisplay()
     }
     
     @IBAction func clearKeyTapped(sender: Key) {
-        clearDisplay()
+        clearScreen()
     }
-    
-    @IBAction func operationKeyTapped(sender: Key) {
-        
-        /*
-        valueOne = displayLabel.text
-        operation = sender.currentTitle
-        // ^^ Replace with check for UIButton Tag? Or Use custom classes?
+    */
  
-        
-        isTyping = false
-        */
-        
-        enum Operation: String {
-            case add = "+"
-            case subtract = "−"
-            case divide = "÷"
-            case multiply = "×"
-        }
-        
+    /*
+    @IBAction func operationKeyTapped(sender: Key) {
         operation = sender.currentTitle
         firstNumber = Double(displayValue)
         isTyping = false
     }
+    */
     
     @IBAction func equalsKeyTapped(sender: Key) {
         var solution: Double = 0
@@ -152,14 +163,23 @@ class ViewController: UIViewController {
         isTyping = false
         textEntry = "\(solution)"
         displayValue = getNumber(from: textEntry)
+        updateDisplay()
+    }
+    
+    // Can I make an optional version of this that updates the display with the number passed in?
+    // Or should I keep it as is so that displayLabel only updates once it has a value to display?
+    func updateDisplay() {
         displayLabel.text = getString(from: displayValue)
     }
     
-    func clearDisplay() {
+    func clearScreen() {
+        textEntry = "0"
+        displayValue = 0
         firstNumber = 0
         secondNumber = 0
-        displayLabel.text = "0"
         isTyping = false
+        
+        updateDisplay()
     }
     
 }
