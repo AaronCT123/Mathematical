@@ -10,15 +10,18 @@ import UIKit
 
 class ViewController: UIViewController {
     
-    var valueOne: String?
-    var valueTwo: String?
+    @IBOutlet weak var displayLabel: UILabel!
+    
+    var textEntry: String? = "0"
+    var displayValue: NSNumber = 0.000
+
+    var isTyping = false
+    var trailingZeroes = ""
+    
+    var firstNumber: Double = 0
+    var secondNumber: Double = 0
+    
     var operation: String?
-    var solution: Double = 0
-    
-    var isTyping: Bool = false
-    var isFraction: Bool = false
-    
-    @IBOutlet weak var calculatorDisplay: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,73 +34,164 @@ class ViewController: UIViewController {
     }
     
     @IBAction func numberKeyTapped(sender: UIButton) {
-        let number = sender.currentTitle
-        let displayText = calculatorDisplay.text
+        let keyTapped = sender.currentTitle
         
         if isTyping {
-            if let num = number, let display = displayText {
-                calculatorDisplay.text = display + num
+            if let key = keyTapped, let text = textEntry {
+                let characterCount = text.characters.count
+                if (text.hasDecimal && characterCount < 11) || (characterCount < 10) {
+                    textEntry = text + key
+                }
             }
         } else {
-            calculatorDisplay.text = number
-            isTyping = true
+            if let key = keyTapped {
+                textEntry = key
+                isTyping = true
+            }
+        }
+        
+        trailingZeroes = ""
+        displayValue = getNumber(from: textEntry)
+        updateDisplay()
+    }
+    
+    @IBAction func zeroKeyTapped(sender: Key) {
+        let key = "0"
+        trailingZeroes += "0"
+
+        if isTyping {
+            if let text = textEntry {
+                textEntry = text + key
+                
+                if text.hasDecimal && (text.lastCharacter == "." || text.lastCharacter == "0") {
+                    displayLabel.text = "\(getString(from: displayValue) ?? "")" + "." + trailingZeroes
+                } else {
+                    displayLabel.text = "\(getString(from: displayValue) ?? "")" + key
+                }
+            }
+        }
+    }
+
+    @IBAction func decimalKeyTapped(sender: Key) {
+        var newString: String?
+ 
+        if let oldString = textEntry {
+            if oldString.hasDecimal == false {
+                newString = oldString + "."
+                isTyping = true
+                trailingZeroes = ""
+                
+                textEntry = newString
+                displayValue = getNumber(from: newString)
+                displayLabel.text = "\(getString(from: displayValue) ?? "")" + "."
+            }
         }
     }
  
-    @IBAction func decimalKeyTapped(sender: UIButton) {
-        let displayText = calculatorDisplay.text
+    @IBAction func deleteKeyTapped(sender: Key) {
+        var newString: String?
         
-        if isFraction == false {
-            if let display = displayText {
-                calculatorDisplay.text = display + "."
-            }
-            isFraction = true
-            isTyping = true
+        if let oldString = textEntry {
+            newString = oldString.substring(to: oldString.index(before: oldString.endIndex))
         }
-    }
-    
-    @IBAction func deleteKeyTapped(sender: UIButton) {
-        var displayText = "\(calculatorDisplay.text ?? "")"
-        displayText.remove(at: displayText.index(before: displayText.endIndex))
         
-        if displayText != "" {
-            calculatorDisplay.text = displayText
-        } else {
+        print(newString)
+        print("^^ newString")
+        
+        if let new = newString {
+            
+        if new == "" || new == nil {
             clearScreen()
+        } else if new.lastCharacter == "." {
+            textEntry = new
+            displayValue = getNumber(from: new)
+            displayLabel.text = "\(getString(from: displayValue) ?? "")" + "."
+        } else if new.hasDecimal && new.lastCharacter == "0" {
+            textEntry = new
+            displayValue = getNumber(from: new)
+            displayLabel.text = "\(getString(from: displayValue) ?? "")" + trailingZeroes
+        } else {
+            textEntry = new
+            displayValue = getNumber(from: textEntry)
+            
         }
+            print(textEntry)
+            print("^^ textEntry")
+            updateDisplay()
+        }
+    
     }
     
-    @IBAction func clearKeyTapped(sender: UIButton) {
+    @IBAction func clearKeyTapped(sender: Key) {
         clearScreen()
     }
-    
-    @IBAction func operationKeyTapped(sender: UIButton) {
-        valueOne = calculatorDisplay.text
+ 
+    /*
+    @IBAction func operationKeyTapped(sender: Key) {
         operation = sender.currentTitle
+        firstNumber = Double(displayValue)
         isTyping = false
     }
+    */
     
-    @IBAction func equalsKeyTapped(sender: UIButton) {
-        valueTwo = calculatorDisplay.text
+    /*
+    @IBAction func equalsKeyTapped(sender: Key) {
+        var solution: Double = 0
+        let display = Double(displayValue)
+        secondNumber = Double(displayValue)
         
-        if let a = valueOne, let b = valueTwo {
+        if isTyping {
             if operation == "+" {
-                solution = Double(a)! + Double(b)!
+                solution = firstNumber + secondNumber
             }
-            if operation == "-" {
-                solution = Double(a)! - Double(b)!
+            if operation == "−" {
+                solution = firstNumber - secondNumber
+            }
+            if operation == "×" {
+                solution = firstNumber * secondNumber
+            }
+            if operation == "÷" {
+                solution = firstNumber / secondNumber
+            }
+            
+            firstNumber = secondNumber
+        } else {
+            if operation == "+" {
+                solution += display + firstNumber
+            }
+            if operation == "−" {
+                solution = display - firstNumber
+            }
+            if operation == "×" {
+                solution = display * firstNumber
+            }
+            if operation == "÷" {
+                solution = display / firstNumber
             }
         }
         
-        // Check whether you can display solution as an Int
-        
-        calculatorDisplay.text = "\(solution)"
         isTyping = false
+        textEntry = "\(solution)"
+        displayValue = getNumber(from: textEntry)
+        displayLabel.text = getString(from: displayValue)
     }
+    */
     
+    // Can I make an optional version of this that updates the display with the number passed in?
+    // Or should I keep it as is so that displayLabel only updates once it has a value to display?
+    
+    func updateDisplay() {
+        displayLabel.text = getString(from: displayValue)
+    }
+
     func clearScreen() {
-        calculatorDisplay.text = "0"
+        trailingZeroes = ""
+        textEntry = "0"
+        displayValue = 0
+        firstNumber = 0
+        secondNumber = 0
         isTyping = false
+        updateDisplay()
     }
     
 }
