@@ -31,16 +31,18 @@ extension String {
     }
 }
 
+let numberFormatter = NumberFormatter()
+
 func getNumber(from string: String?) -> NSNumber {
-    let formatter = NumberFormatter()
-    formatter.generatesDecimalNumbers = true
-    formatter.numberStyle = .decimal
-    return formatter.number(from: string!)!
+    numberFormatter.numberStyle = .decimal
+    return numberFormatter.number(from: string!)!
 }
 
+let stringFormatter = NumberFormatter()
+
 func getString(from value: NSNumber) -> String? {
-    let formatter = NumberFormatter()
-    formatter.generatesDecimalNumbers = true
-    formatter.numberStyle = .decimal
-    return formatter.string(from: value)
+    stringFormatter.numberStyle = .decimal
+    stringFormatter.usesSignificantDigits = true
+    stringFormatter.maximumSignificantDigits = 10
+    return stringFormatter.string(from: value)
 }

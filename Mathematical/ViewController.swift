@@ -16,6 +16,7 @@ class ViewController: UIViewController {
     var displayValue: NSNumber = 0.000
 
     var isTyping = false
+    var trailingZeroes = ""
     
     var firstNumber: Double = 0
     var secondNumber: Double = 0
@@ -36,8 +37,11 @@ class ViewController: UIViewController {
         let keyTapped = sender.currentTitle
         
         if isTyping {
-            if let key = keyTapped {
-                displayLabel.text = textEntry! + key
+            if let key = keyTapped, let text = textEntry {
+                let characterCount = text.characters.count
+                if (text.hasDecimal && characterCount < 11) || (characterCount < 10) {
+                    textEntry = text + key
+                }
             }
         } else {
             if let key = keyTapped {
@@ -46,50 +50,40 @@ class ViewController: UIViewController {
             }
         }
         
-        // Check if there’s a decimal? Then do something…
-        
+        trailingZeroes = ""
         displayValue = getNumber(from: textEntry)
-        // displayLabel.text = getString(from: displayValue)
         updateDisplay()
-        print(textEntry)
-        print("^^ Text Entry")
-        
-        print(displayValue)
-        print("^^ Value")
-        
-        print("\(displayLabel.text)")
-        print("^^ Label")
     }
     
     @IBAction func zeroKeyTapped(sender: Key) {
-        
+        let key = "0"
+        trailingZeroes += "0"
+
+        if isTyping {
+            if let text = textEntry {
+                textEntry = text + key
+                
+                if text.hasDecimal && (text.lastCharacter == "." || text.lastCharacter == "0") {
+                    displayLabel.text = "\(getString(from: displayValue) ?? "")" + "." + trailingZeroes
+                } else {
+                    displayLabel.text = "\(getString(from: displayValue) ?? "")" + key
+                }
+            }
+        }
     }
 
     @IBAction func decimalKeyTapped(sender: Key) {
-        /*
-        let displayText = calculatorDisplay.text
- 
-        if isFraction == false {
-            if let display = displayText {
-                calculatorDisplay.text = display + "."
-            }
-         
-            isFraction = true
-            isTyping = true
-        }
-        */
-        
         var newString: String?
  
         if let oldString = textEntry {
             if oldString.hasDecimal == false {
                 newString = oldString + "."
                 isTyping = true
+                trailingZeroes = ""
                 
+                textEntry = newString
                 displayValue = getNumber(from: newString)
                 displayLabel.text = "\(getString(from: displayValue) ?? "")" + "."
-                textEntry = displayLabel.text
-                print(textEntry)
             }
         }
     }
@@ -100,15 +94,32 @@ class ViewController: UIViewController {
         if let oldString = textEntry {
             newString = oldString.substring(to: oldString.index(before: oldString.endIndex))
         }
-
-        if newString != "" {
-            textEntry = newString
-        } else {
-            clearScreen()
-        }
         
-        displayValue = getNumber(from: textEntry)
-        updateDisplay()
+        print(newString)
+        print("^^ newString")
+        
+        if let new = newString {
+            
+        if new == "" || new == nil {
+            clearScreen()
+        } else if new.lastCharacter == "." {
+            textEntry = new
+            displayValue = getNumber(from: new)
+            displayLabel.text = "\(getString(from: displayValue) ?? "")" + "."
+        } else if new.hasDecimal && new.lastCharacter == "0" {
+            textEntry = new
+            displayValue = getNumber(from: new)
+            displayLabel.text = "\(getString(from: displayValue) ?? "")" + trailingZeroes
+        } else {
+            textEntry = new
+            displayValue = getNumber(from: textEntry)
+            
+        }
+            print(textEntry)
+            print("^^ textEntry")
+            updateDisplay()
+        }
+    
     }
     
     @IBAction func clearKeyTapped(sender: Key) {
@@ -174,13 +185,13 @@ class ViewController: UIViewController {
     }
 
     func clearScreen() {
+        trailingZeroes = ""
         textEntry = "0"
-        // displayValue = 0
+        displayValue = 0
         firstNumber = 0
         secondNumber = 0
         isTyping = false
-        
-        // updateDisplay()
+        updateDisplay()
     }
     
 }
