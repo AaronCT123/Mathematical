@@ -50,7 +50,7 @@
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
-                                            <action selector="zeroKeyTappedWithSender:" destination="BYZ-38-t0r" eventType="touchUpInside" id="p4g-mH-ygl"/>
+                                            <action selector="numberKeyTappedWithSender:" destination="BYZ-38-t0r" eventType="touchUpInside" id="OtP-38-Jsr"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5kB-40-Nkp" customClass="Key" customModule="Mathematical" customModuleProvider="target">
