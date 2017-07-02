@@ -12,11 +12,13 @@ class ViewController: UIViewController {
     
     @IBOutlet weak var displayLabel: UILabel!
     
-    var textEntry: String? = "0"
-    var displayValue: NSNumber = 0.000
+    var integerDigits: String = "0"
+    var fractionDigits: String = ""
+    var displayValue: NSNumber = 0
 
+    var hasAnswer = false
+    var hasDecimal = false
     var isTyping = false
-    var trailingZeroes = ""
     
     var firstNumber: Double = 0
     var secondNumber: Double = 0
@@ -35,106 +37,78 @@ class ViewController: UIViewController {
     
     @IBAction func numberKeyTapped(sender: UIButton) {
         let keyTapped = sender.currentTitle
+        let textEntry = integerDigits + fractionDigits
+        let charCount = textEntry.characters.count
         
-        if isTyping {
-            if let key = keyTapped, let text = textEntry {
-                let characterCount = text.characters.count
-                if (text.hasDecimal && characterCount < 11) || (characterCount < 10) {
-                    textEntry = text + key
-                }
-            }
-        } else {
+        if (charCount < 10) || (charCount < 11 && hasDecimal == true) {
             if let key = keyTapped {
-                textEntry = key
-                isTyping = true
-            }
-        }
-        
-        trailingZeroes = ""
-        displayValue = getNumber(from: textEntry)
-        updateDisplay()
-    }
-    
-    @IBAction func zeroKeyTapped(sender: Key) {
-        let key = "0"
-        trailingZeroes += "0"
-
-        if isTyping {
-            if let text = textEntry {
-                textEntry = text + key
-                
-                if text.hasDecimal && (text.lastCharacter == "." || text.lastCharacter == "0") {
-                    displayLabel.text = "\(getString(from: displayValue) ?? "")" + "." + trailingZeroes
+                if isTyping {
+                    if hasDecimal == true {
+                        fractionDigits += key
+                    } else {
+                        integerDigits += key
+                    }
                 } else {
-                    displayLabel.text = "\(getString(from: displayValue) ?? "")" + key
+                    integerDigits = key
+                    isTyping = true
                 }
             }
         }
+        
+        hasAnswer = false
+        updateDisplay()
     }
 
     @IBAction func decimalKeyTapped(sender: Key) {
-        var newString: String?
- 
-        if let oldString = textEntry {
-            if oldString.hasDecimal == false {
-                newString = oldString + "."
-                isTyping = true
-                trailingZeroes = ""
-                
-                textEntry = newString
-                displayValue = getNumber(from: newString)
-                displayLabel.text = "\(getString(from: displayValue) ?? "")" + "."
-            }
+        let textEntry = integerDigits + fractionDigits
+        let charCount = textEntry.characters.count
+        
+        if hasDecimal == false && charCount < 10 {
+            isTyping = true
+            hasDecimal = true
+            hasAnswer = false
+            
+            fractionDigits = "."
+            updateDisplay()
         }
     }
  
     @IBAction func deleteKeyTapped(sender: Key) {
-        var newString: String?
-        
-        if let oldString = textEntry {
-            newString = oldString.substring(to: oldString.index(before: oldString.endIndex))
-        }
-        
-        print(newString)
-        print("^^ newString")
-        
-        if let new = newString {
+        if hasAnswer == false {
+            if hasDecimal == true {
+                let newString = fractionDigits.substring(to: fractionDigits.index(before: fractionDigits.endIndex))
+                fractionDigits = newString
             
-        if new == "" || new == nil {
-            clearScreen()
-        } else if new.lastCharacter == "." {
-            textEntry = new
-            displayValue = getNumber(from: new)
-            displayLabel.text = "\(getString(from: displayValue) ?? "")" + "."
-        } else if new.hasDecimal && new.lastCharacter == "0" {
-            textEntry = new
-            displayValue = getNumber(from: new)
-            displayLabel.text = "\(getString(from: displayValue) ?? "")" + trailingZeroes
-        } else {
-            textEntry = new
-            displayValue = getNumber(from: textEntry)
+                if fractionDigits == "" {
+                    hasDecimal = false
+                }
             
-        }
-            print(textEntry)
-            print("^^ textEntry")
+            } else {
+                let newString = integerDigits.substring(to: integerDigits.index(before: integerDigits.endIndex))
+                integerDigits = newString
+            
+                if integerDigits == "" {
+                    clearScreen()
+                }
+            }
+            
             updateDisplay()
         }
-    
     }
     
     @IBAction func clearKeyTapped(sender: Key) {
         clearScreen()
     }
  
-    /*
     @IBAction func operationKeyTapped(sender: Key) {
         operation = sender.currentTitle
         firstNumber = Double(displayValue)
+        
         isTyping = false
+        hasDecimal = false
+        fractionDigits = ""
     }
-    */
     
-    /*
     @IBAction func equalsKeyTapped(sender: Key) {
         var solution: Double = 0
         let display = Double(displayValue)
@@ -170,29 +144,45 @@ class ViewController: UIViewController {
             }
         }
         
-        isTyping = false
-        textEntry = "\(solution)"
-        displayValue = getNumber(from: textEntry)
+        let solutionString = String(solution)
+        
+        displayValue = getNumber(from: solutionString)
         displayLabel.text = getString(from: displayValue)
+        isTyping = false
+        hasAnswer = true
     }
-    */
     
     // Can I make an optional version of this that updates the display with the number passed in?
     // Or should I keep it as is so that displayLabel only updates once it has a value to display?
     
+    
     func updateDisplay() {
-        displayLabel.text = getString(from: displayValue)
+        let cleanIntString = getNumber(from: integerDigits)
+        
+        if hasDecimal == true {
+            let intString = getString(from: cleanIntString)
+            
+            if let ints = intString {
+                displayLabel.text = ints + fractionDigits
+            }
+        } else {
+            displayLabel.text = getString(from: cleanIntString)
+        }
+        
+        displayValue = getNumber(from: displayLabel.text)
     }
 
     func clearScreen() {
-        trailingZeroes = ""
-        textEntry = "0"
+        integerDigits = "0"
+        fractionDigits = ""
         displayValue = 0
         firstNumber = 0
         secondNumber = 0
+        
+        hasAnswer = false
+        hasDecimal = false
         isTyping = false
         updateDisplay()
     }
     
 }
-
