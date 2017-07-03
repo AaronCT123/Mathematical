@@ -31,13 +31,6 @@ extension String {
     }
 }
 
-let numberFormatter = NumberFormatter()
-
-func getNumber(from string: String?) -> NSNumber {
-    numberFormatter.numberStyle = .decimal
-    return numberFormatter.number(from: string!)!
-}
-
 let stringFormatter = NumberFormatter()
 
 func getString(from value: NSNumber) -> String? {
@@ -46,3 +39,49 @@ func getString(from value: NSNumber) -> String? {
     stringFormatter.maximumSignificantDigits = 10
     return stringFormatter.string(from: value)
 }
+
+func scientificNotation(of value: NSNumber) -> String? {
+    stringFormatter.numberStyle = .scientific
+    stringFormatter.usesSignificantDigits = true
+    stringFormatter.maximumSignificantDigits = 6
+    
+    let solution = stringFormatter.string(from: value)
+    return solution?.lowercased()
+}
+
+let numberFormatter = NumberFormatter()
+
+func getNumber(from string: String?) -> NSNumber {
+    numberFormatter.numberStyle = .decimal
+    return numberFormatter.number(from: string!)!
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
