@@ -56,7 +56,12 @@ func getNumber(from string: String?) -> NSNumber {
     return numberFormatter.number(from: string!)!
 }
 
+let percentageFormatter = NumberFormatter()
 
+func getPercentage(from string: String) -> NSNumber {
+   percentageFormatter.numberStyle = .decimal
+    return percentageFormatter.number(from: string)!
+}
 
 
 

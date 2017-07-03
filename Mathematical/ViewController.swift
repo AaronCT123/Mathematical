@@ -73,6 +73,21 @@ class ViewController: UIViewController {
         }
     }
  
+    @IBAction func percentKey(sender: Key) {
+        let currentValue = Double(displayValue)
+        print(currentValue)
+        print("currentValue")
+        let percentage = currentValue/100
+        print(percentage)
+        print("percentage")
+        let percentString = String(percentage)
+        print(percentString)
+        
+        displayValue = getNumber(from: percentString)
+        displayLabel.text = getString(from: displayValue)
+        isTyping = false
+    }
+    
     @IBAction func deleteKeyTapped(sender: Key) {
         if hasAnswer == false {
             if hasDecimal == true {
@@ -112,9 +127,6 @@ class ViewController: UIViewController {
     @IBAction func equalsKeyTapped(sender: Key) {
         calculate()
     }
-    
-    // Can I make an optional version of this that updates the display with the number passed in?
-    // Or should I keep it as is so that displayLabel only updates once it has a value to display?
     
     func calculate() {
         var solution: Double = 0

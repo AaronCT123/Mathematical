@@ -265,24 +265,27 @@
                                         <state key="normal" title="%">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
+                                        <connections>
+                                            <action selector="percentKeyWithSender:" destination="BYZ-38-t0r" eventType="touchUpInside" id="ccD-C9-Kgc"/>
+                                        </connections>
                                     </button>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             </view>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="42" translatesAutoresizingMaskIntoConstraints="NO" id="Xzx-dQ-v4a">
-                                <rect key="frame" x="16" y="91" width="288" height="77"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="64"/>
+                                <rect key="frame" x="16" y="91" width="288" height="88.5"/>
+                                <fontDescription key="fontDescription" type="system" weight="light" pointSize="74"/>
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
+                            <constraint firstItem="Xzx-dQ-v4a" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="71" id="ErE-QZ-jWR"/>
                             <constraint firstItem="Xzx-dQ-v4a" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="16" id="MoI-Gn-BBW"/>
-                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="aeG-3i-PF3" secondAttribute="bottom" id="PeZ-ud-mVZ"/>
                             <constraint firstAttribute="trailing" secondItem="aeG-3i-PF3" secondAttribute="trailing" id="kzv-CI-XTO"/>
-                            <constraint firstItem="Xzx-dQ-v4a" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="71" id="mTF-Iq-T1z"/>
                             <constraint firstAttribute="trailing" secondItem="Xzx-dQ-v4a" secondAttribute="trailing" constant="16" id="oEg-XV-X4N"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="aeG-3i-PF3" secondAttribute="bottom" id="vu5-CR-3tW"/>
                             <constraint firstItem="aeG-3i-PF3" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="xZV-9r-pux"/>
                             <constraint firstItem="aeG-3i-PF3" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="zMo-rO-rHj"/>
                         </constraints>
