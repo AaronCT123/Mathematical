@@ -110,6 +110,13 @@ class ViewController: UIViewController {
     }
     
     @IBAction func equalsKeyTapped(sender: Key) {
+        calculate()
+    }
+    
+    // Can I make an optional version of this that updates the display with the number passed in?
+    // Or should I keep it as is so that displayLabel only updates once it has a value to display?
+    
+    func calculate() {
         var solution: Double = 0
         let display = Double(displayValue)
         secondNumber = Double(displayValue)
@@ -143,18 +150,21 @@ class ViewController: UIViewController {
                 solution = display / firstNumber
             }
         }
-        
+
         let solutionString = String(solution)
+        let charCount = solutionString.characters.count
         
         displayValue = getNumber(from: solutionString)
-        displayLabel.text = getString(from: displayValue)
+        
+        if (charCount > 10) || (charCount > 11 && hasDecimal == true) {
+            displayLabel.text = scientificNotation(of: displayValue)
+        } else {
+            displayLabel.text = getString(from: displayValue)
+        }
+        
         isTyping = false
         hasAnswer = true
     }
-    
-    // Can I make an optional version of this that updates the display with the number passed in?
-    // Or should I keep it as is so that displayLabel only updates once it has a value to display?
-    
     
     func updateDisplay() {
         let cleanIntString = getNumber(from: integerDigits)
