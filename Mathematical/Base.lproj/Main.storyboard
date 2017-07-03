@@ -244,6 +244,9 @@
                                         <state key="normal" title="+/-">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
+                                        <connections>
+                                            <action selector="negativeKeyTappedWithSender:" destination="BYZ-38-t0r" eventType="touchUpInside" id="EGV-07-ljC"/>
+                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qUo-m6-uq4" customClass="Key" customModule="Mathematical" customModuleProvider="target">
                                         <rect key="frame" x="241" y="0.0" width="79" height="70"/>

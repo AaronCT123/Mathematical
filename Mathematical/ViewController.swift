@@ -17,8 +17,9 @@ class ViewController: UIViewController {
     var displayValue: NSNumber = 0
 
     var hasAnswer = false
-    var hasDecimal = false
+    var isDecimal = false
     var isTyping = false
+    var isNegative = false
     
     var firstNumber: Double = 0
     var secondNumber: Double = 0
@@ -40,10 +41,10 @@ class ViewController: UIViewController {
         let textEntry = integerDigits + fractionDigits
         let charCount = textEntry.characters.count
         
-        if (charCount < 10) || (charCount < 11 && hasDecimal == true) {
+        if (charCount < 10) || (charCount < 11 && isDecimal == true) {
             if let key = keyTapped {
                 if isTyping {
-                    if hasDecimal == true {
+                    if isDecimal == true {
                         fractionDigits += key
                     } else {
                         integerDigits += key
@@ -63,9 +64,9 @@ class ViewController: UIViewController {
         let textEntry = integerDigits + fractionDigits
         let charCount = textEntry.characters.count
         
-        if hasDecimal == false && charCount < 10 {
+        if isDecimal == false && charCount < 10 {
             isTyping = true
-            hasDecimal = true
+            isDecimal = true
             hasAnswer = false
             
             fractionDigits = "."
@@ -73,14 +74,20 @@ class ViewController: UIViewController {
         }
     }
  
+    @IBAction func negativeKeyTapped(sender: Key) {
+        let sign = !isNegative
+        isNegative = sign
+        print(isNegative)
+    }
+    
     @IBAction func deleteKeyTapped(sender: Key) {
         if hasAnswer == false {
-            if hasDecimal == true {
+            if isDecimal == true {
                 let newString = fractionDigits.substring(to: fractionDigits.index(before: fractionDigits.endIndex))
                 fractionDigits = newString
             
                 if fractionDigits == "" {
-                    hasDecimal = false
+                    isDecimal = false
                 }
             
             } else {
@@ -105,7 +112,7 @@ class ViewController: UIViewController {
         firstNumber = Double(displayValue)
         
         isTyping = false
-        hasDecimal = false
+        isDecimal = false
         fractionDigits = ""
     }
     
@@ -116,6 +123,7 @@ class ViewController: UIViewController {
     // Can I make an optional version of this that updates the display with the number passed in?
     // Or should I keep it as is so that displayLabel only updates once it has a value to display?
     
+    // Currently doesn’t work if user presses Equals Key after entering firstNumber. Might have to make firstNumber & secondNumber optionals?
     func calculate() {
         var solution: Double = 0
         let display = Double(displayValue)
@@ -156,7 +164,7 @@ class ViewController: UIViewController {
         
         displayValue = getNumber(from: solutionString)
         
-        if (charCount > 10) || (charCount > 11 && hasDecimal == true) {
+        if (charCount > 10) || (charCount > 11 && isDecimal == true) {
             displayLabel.text = scientificNotation(of: displayValue)
         } else {
             displayLabel.text = getString(from: displayValue)
@@ -169,7 +177,7 @@ class ViewController: UIViewController {
     func updateDisplay() {
         let cleanIntString = getNumber(from: integerDigits)
         
-        if hasDecimal == true {
+        if isDecimal == true {
             let intString = getString(from: cleanIntString)
             
             if let ints = intString {
@@ -190,7 +198,7 @@ class ViewController: UIViewController {
         secondNumber = 0
         
         hasAnswer = false
-        hasDecimal = false
+        isDecimal = false
         isTyping = false
         updateDisplay()
     }
