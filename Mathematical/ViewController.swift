@@ -77,7 +77,7 @@ class ViewController: UIViewController {
     @IBAction func negativeKeyTapped(sender: Key) {
         let sign = !isNegative
         isNegative = sign
-        print(isNegative)
+        updateDisplay()
     }
     
     @IBAction func deleteKeyTapped(sender: Key) {
@@ -113,6 +113,7 @@ class ViewController: UIViewController {
         
         isTyping = false
         isDecimal = false
+        isNegative = false
         fractionDigits = ""
     }
     
@@ -129,36 +130,40 @@ class ViewController: UIViewController {
         let display = Double(displayValue)
         secondNumber = Double(displayValue)
         
-        if isTyping {
-            if operation == "+" {
-                solution = firstNumber + secondNumber
+        if let op = operation {
+            if isTyping {
+                if op == "+" {
+                    solution = firstNumber + secondNumber
+                }
+                if op == "−" {
+                    solution = firstNumber - secondNumber
+                }
+                if op == "×" {
+                    solution = firstNumber * secondNumber
+                }
+                if op == "÷" {
+                    solution = firstNumber / secondNumber
+                }
+                
+                firstNumber = secondNumber
+            } else {
+                if op == "+" {
+                    solution += display + firstNumber
+                }
+                if op == "−" {
+                    solution = display - firstNumber
+                }
+                if op == "×" {
+                    solution = display * firstNumber
+                }
+                if op == "÷" {
+                    solution = display / firstNumber
+                }
             }
-            if operation == "−" {
-                solution = firstNumber - secondNumber
-            }
-            if operation == "×" {
-                solution = firstNumber * secondNumber
-            }
-            if operation == "÷" {
-                solution = firstNumber / secondNumber
-            }
-            
-            firstNumber = secondNumber
         } else {
-            if operation == "+" {
-                solution += display + firstNumber
-            }
-            if operation == "−" {
-                solution = display - firstNumber
-            }
-            if operation == "×" {
-                solution = display * firstNumber
-            }
-            if operation == "÷" {
-                solution = display / firstNumber
-            }
+            solution = display
         }
-
+        
         let solutionString = String(solution)
         let charCount = solutionString.characters.count
         
@@ -175,19 +180,27 @@ class ViewController: UIViewController {
     }
     
     func updateDisplay() {
-        let cleanIntString = getNumber(from: integerDigits)
+        var integerValue: NSNumber?
         
-        if isDecimal == true {
-            let intString = getString(from: cleanIntString)
-            
-            if let ints = intString {
-                displayLabel.text = ints + fractionDigits
-            }
+        if isNegative {
+            integerValue = getNumber(from: "-\(integerDigits)")
         } else {
-            displayLabel.text = getString(from: cleanIntString)
+            integerValue = getNumber(from: integerDigits)
         }
         
+        if let cleanString = integerValue {
+            if isDecimal == true {
+                let intString = getString(from: cleanString)
+            
+                if let ints = intString {
+                    displayLabel.text = ints + fractionDigits
+                }
+            } else {
+                displayLabel.text = getString(from: cleanString)
+            }
+        
         displayValue = getNumber(from: displayLabel.text)
+        }
     }
 
     func clearScreen() {
@@ -200,6 +213,7 @@ class ViewController: UIViewController {
         hasAnswer = false
         isDecimal = false
         isTyping = false
+        isNegative = false
         updateDisplay()
     }
     
