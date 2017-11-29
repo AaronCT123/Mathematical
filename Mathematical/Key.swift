@@ -13,54 +13,31 @@ class Key: UIButton {
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         
-        self.layer.cornerRadius = 3
+        let highlightColor = UIColor.init(red: 0.75, green: 0.75, blue: 0.75, alpha: 1.0)
+        self.layer.cornerRadius = 0.15 * self.bounds.size.width
+        self.clipsToBounds = true
+        self.setBackgroundImage(Key.imageFromColor(color: highlightColor), for: .highlighted)
     }
-}
 
-extension String {
-    var hasDecimal: Bool {
-        if self.characters.contains(".") {
-            return true
-        } else {
-            return false
-        }
+    // Draws calculator key button backgrounds
+    class func convertToCGColor(color: UIColor) -> CGColor {
+        let newColor = color.cgColor
+        return newColor
     }
     
-    var lastCharacter: Character {
-        return self.characters.last!
+    class func imageFromColor(color: UIColor) -> UIImage {
+        let fillColor = convertToCGColor(color: color)
+        
+        let rect = CGRect(x: 0, y: 0, width: 1, height: 1)
+        UIGraphicsBeginImageContext(rect.size)
+        let context = UIGraphicsGetCurrentContext()!
+        context.setFillColor(fillColor)
+        context.fill(rect)
+        
+        let image = UIGraphicsGetImageFromCurrentImageContext()!
+        return image
     }
 }
-
-let stringFormatter = NumberFormatter()
-
-func getString(from value: NSNumber) -> String? {
-    stringFormatter.numberStyle = .decimal
-    stringFormatter.usesSignificantDigits = true
-    stringFormatter.maximumSignificantDigits = 10
-    return stringFormatter.string(from: value)
-}
-
-func scientificNotation(of value: NSNumber) -> String? {
-    stringFormatter.numberStyle = .scientific
-    stringFormatter.usesSignificantDigits = true
-    stringFormatter.maximumSignificantDigits = 6
-    
-    let solution = stringFormatter.string(from: value)
-    return solution?.lowercased()
-}
-
-let numberFormatter = NumberFormatter()
-
-func getNumber(from string: String?) -> NSNumber {
-    numberFormatter.numberStyle = .decimal
-    return numberFormatter.number(from: string!)!
-}
-
-
-
-
-
-
 
 
 
